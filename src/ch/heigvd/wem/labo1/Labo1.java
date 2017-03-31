@@ -70,7 +70,7 @@ public class Labo1 {
 		RobotstxtServer robotstxtServer = new RobotstxtServer(robotsConfig, pageFetcher);
         
 		//we create the indexer and the indexerQueue
-		Indexer indexer = null; //TODO vous instancierez ici votre implémentation de l'indexer
+		Indexer indexer = (Indexer) new Labo1Indexer();
 		WebPageIndexerQueue queue = new WebPageIndexerQueue(indexer);
 		queue.start();
 		//we set the indexerQueue reference to all the crawler threads

@@ -1,5 +1,10 @@
 package ch.heigvd.wem;
 
+import java.util.regex.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import ch.heigvd.wem.data.Metadata;
 import ch.heigvd.wem.data.VisitedPage;
 import ch.heigvd.wem.labo1.Labo1;
@@ -12,10 +17,14 @@ import edu.uci.ics.crawler4j.url.WebURL;
 public class WebPageCrawler extends WebCrawler {
 
 	private static WebPageIndexerQueue indexer = null;
+	
+	static Pattern p = Pattern.compile("(?:\\.)(\\w+)$");
 
 	@Override
 	public boolean shouldVisit(Page referringPage, WebURL url) {
-		/* A IMPLEMENTER */
+		String currentPageDomain = referringPage.getWebURL().getDomain();
+		String path = url.getPath();
+		Matcher m = p.matcher(path);
 		
 		if(Labo1.DEBUG) {
 			System.out.println("shouldVisit called");
@@ -23,7 +32,22 @@ public class WebPageCrawler extends WebCrawler {
 			System.out.println("Url: " + url);
 		}
 		
-		return true;
+		Boolean found = m.find();
+		if (!found) {
+			return true;
+		}
+		String ext = m.group();
+		String linkDomain = url.getDomain();
+		
+		ArrayList<String> accepted = new ArrayList<String>();
+		accepted.addAll(Arrays.asList("html", "php", "xhtml", "aspx", "htm"));
+		
+		if (currentPageDomain.equals(linkDomain) && accepted.contains(ext) ) {
+			return true;
+		}
+		
+		return false;
+	
 	}
 	
 	@Override
@@ -45,7 +69,7 @@ public class WebPageCrawler extends WebCrawler {
 			metadata.setLinks(htmlData.getOutgoingUrls());
 			content = htmlData.getText();
 		}
-
+		
 		//we queue the page for indexer
 		VisitedPage visitedPage = new VisitedPage(metadata, content);
 		indexer.queueVisitedPage(visitedPage);
