@@ -5,6 +5,7 @@ import java.util.HashMap;
 import ch.heigvd.wem.interfaces.Index;
 
 public class Labo1Index extends Index {
+	private static final long serialVersionUID = -9025028578135182266L;
 	private HashMap<String, HashMap<Integer, Integer>> map;
 	
 	public Labo1Index() {
