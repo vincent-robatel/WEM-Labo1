@@ -22,31 +22,38 @@ public class WebPageCrawler extends WebCrawler {
 
 	@Override
 	public boolean shouldVisit(Page referringPage, WebURL url) {
-		String currentPageDomain = referringPage.getWebURL().getDomain();
+		String targetDomain = Labo1.START_URL;
 		String path = url.getPath();
 		Matcher m = p.matcher(path);
 		
 		if(Labo1.DEBUG) {
-			System.out.println("shouldVisit called");
-			System.out.println("Referring page: " + referringPage.getWebURL());
-			System.out.println("Url: " + url);
+			System.out.println(url + "to add, by " + referringPage.getWebURL());
 		}
 		
-		Boolean found = m.find();
-		if (!found) {
-			return true;
+		// Only visit if it is on the same domain
+		if (url.getURL().startsWith(targetDomain)) {
+			// Does the path have an extension at the end
+			Boolean found = m.find();
+			// If not then we don't know what it is, visit it.
+			if (!found) {
+				System.out.println(url + " ADDED");
+				return true;
+			}
+			String ext = m.group();
+			
+			ArrayList<String> accepted = new ArrayList<String>();
+			accepted.addAll(Arrays.asList("html", "php", "xhtml", "aspx", "htm", "txt"));
+			// If we know what it is and it's not a recognized format, don't visit it.
+			if (accepted.contains(ext) ) {
+				System.out.println(url + " ADDED");
+				return true;
+			}
+			System.out.println(url + " REFUSED (extension)");
+			return false;
+		} else {
+			System.out.println(url + " REFUSED (domain)");
+			return false;
 		}
-		String ext = m.group();
-		String linkDomain = url.getDomain();
-		
-		ArrayList<String> accepted = new ArrayList<String>();
-		accepted.addAll(Arrays.asList("html", "php", "xhtml", "aspx", "htm"));
-		
-		if (currentPageDomain.equals(linkDomain) && accepted.contains(ext) ) {
-			return true;
-		}
-		
-		return false;
 	
 	}
 	
