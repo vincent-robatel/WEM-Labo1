@@ -6,22 +6,36 @@ import ch.heigvd.wem.interfaces.Index;
 
 public class Labo1Index extends Index {
 	private static final long serialVersionUID = -9025028578135182266L;
-	private HashMap<String, HashMap<Integer, Integer>> map;
+	private HashMap<String, HashMap<Long, Integer>> wordToDoc;
+	private HashMap<Long, HashMap<String, Integer>> docToWord;
 	
 	public Labo1Index() {
-		super();
-		this.map = new HashMap<String, HashMap<Integer, Integer>>();
+		this.wordToDoc = new HashMap<String, HashMap<Long, Integer>>();
+		this.docToWord = new HashMap<Long, HashMap<String, Integer>>();
 	}
 
-	public void add(Integer docId, String word) {
-		if (!this.map.containsKey(word)) {
-			this.map.put(word, new HashMap<Integer, Integer>());
+	public synchronized void add(Long docId, String word) {
+		
+		if (!this.wordToDoc.containsKey(word)) {
+			this.wordToDoc.put(word, new HashMap<Long, Integer>());
 		}
-		HashMap<Integer, Integer> wordMap = this.map.get(word);
+		if (!this.docToWord.containsKey(docId)) {
+			this.docToWord.put(docId, new HashMap<String, Integer>());
+		}
+		
+		HashMap<Long, Integer> wordMap =  this.wordToDoc.get(word);
+		HashMap<String, Integer> docMap = this.docToWord.get(docId);
+		
 		if (!wordMap.containsKey(docId)) {
 			wordMap.put(docId, 0);
 		}
-		int current = wordMap.get(docId);
-		wordMap.put(docId, current++);
+		Integer currentWord = wordMap.get(docId);
+		wordMap.put(docId, currentWord + 1);
+		
+		if (!docMap.containsKey(word)) {
+			docMap.put(word, 0);
+		}
+		Integer currentDoc = docMap.get(word);
+		docMap.put(word, currentDoc + 1);
 	}
 }

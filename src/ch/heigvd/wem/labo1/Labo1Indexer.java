@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import ch.heigvd.wem.data.Metadata;
 import ch.heigvd.wem.interfaces.Index;
@@ -18,19 +17,21 @@ public class Labo1Indexer implements Indexer {
 
 	public Labo1Indexer() {
 		super();
-		ArrayList<String> stopWordsTemp = new ArrayList<String>();
+		stopWords = new ArrayList<String>();
 		try {
 			// Chargement des stop words EN
 			BufferedReader br = new BufferedReader(new FileReader("common_words"));
 		    String line;
 		    while ((line = br.readLine()) != null) {
-		       stopWordsTemp.add(line);
+		       stopWords.add(line);
 		    }
+		    br.close();
 		    // Chargement des stop words FR
 			br = new BufferedReader(new FileReader("common_words_fr"));
 		    while ((line = br.readLine()) != null) {
-		       stopWordsTemp.add(line);
+		       stopWords.add(line);
 		    }
+		    br.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -46,6 +47,7 @@ public class Labo1Indexer implements Indexer {
 		for (int i = 0; i < initialTokens.length; i++) {
 			initialTokens[i] = initialTokens[i].replaceFirst("^['\"`]", ""); // Enlève l'éventuel premier apostrophe
 			initialTokens[i] = initialTokens[i].replaceFirst("['\"`]$", ""); // Enlève l'éventuel dernier apostrophe
+			initialTokens[i] = initialTokens[i].toLowerCase();
 		}
 		ArrayList<String> tokens = new ArrayList<String>();
 		
@@ -58,7 +60,10 @@ public class Labo1Indexer implements Indexer {
 			}
 		}
 		
-		
+		// Adding index and inverted index
+		for (String token : tokens) {
+			index.add(metadata.getDocID(), token);
+		}
 	}
 
 	@Override
