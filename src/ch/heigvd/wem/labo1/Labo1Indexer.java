@@ -42,21 +42,26 @@ public class Labo1Indexer implements Indexer {
 	@Override
 	public void index(Metadata metadata, String content) {
 		// Tokenization
-		String[] initialTokens = content.split(" |,|_|\\+|\\(|\\)|\\[|\\]|\\.|;|/");
+		String[] initialTokens = content.split("\\s+|\\.|,|:|;|-|\\+|/|\\\\|\\W+['\"`´]|['\"`´]\\W+");
 		// Pas le plus efficace du monde, mais concis et compréhensible.
 		for (int i = 0; i < initialTokens.length; i++) {
-			initialTokens[i] = initialTokens[i].replaceFirst("^['\"`]", ""); // Enlève l'éventuel premier apostrophe
+			initialTokens[i] = initialTokens[i].trim().replaceFirst("^['\"`]", ""); // Enlève l'éventuel premier apostrophe
 			initialTokens[i] = initialTokens[i].replaceFirst("['\"`]$", ""); // Enlève l'éventuel dernier apostrophe
-			initialTokens[i] = initialTokens[i].toLowerCase();
+			initialTokens[i] = initialTokens[i].toLowerCase().trim();
 		}
 		ArrayList<String> tokens = new ArrayList<String>();
 		
 		// Keeping only non-stop-words
 		for (String token : initialTokens) {
+			boolean toAdd = true;
 			for (String stopWord : stopWords) {
-				if (!stopWord.trim().contains(token)) {
-					tokens.add(token);
+				if (stopWord.trim().contains(token)) {
+					toAdd = false;
+					break;
 				}
+			}
+			if (toAdd) {
+				tokens.add(token);
 			}
 		}
 		
@@ -68,7 +73,6 @@ public class Labo1Indexer implements Indexer {
 
 	@Override
 	public void finalizeIndexation() {
-		// TODO Auto-generated method stub
 		
 	}
 
