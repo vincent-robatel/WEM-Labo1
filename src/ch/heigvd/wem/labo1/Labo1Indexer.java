@@ -73,7 +73,7 @@ public class Labo1Indexer implements Indexer {
 
 	@Override
 	public void finalizeIndexation() {
-		
+		index.finalize();
 	}
 
 	@Override
