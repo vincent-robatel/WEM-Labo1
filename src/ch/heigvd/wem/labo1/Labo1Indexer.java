@@ -13,34 +13,59 @@ import ch.heigvd.wem.interfaces.Indexer;
 public class Labo1Indexer implements Indexer {
 	
 	private Labo1Index index = new Labo1Index();
-	private ArrayList<String> stopWords;
+	private static ArrayList<String> stopWords = new ArrayList<String>();
 
 	public Labo1Indexer() {
 		super();
-		stopWords = new ArrayList<String>();
-		try {
-			// Chargement des stop words EN
-			BufferedReader br = new BufferedReader(new FileReader("common_words"));
-		    String line;
-		    while ((line = br.readLine()) != null) {
-		       stopWords.add(line);
-		    }
-		    br.close();
-		    // Chargement des stop words FR
-			br = new BufferedReader(new FileReader("common_words_fr"));
-		    while ((line = br.readLine()) != null) {
-		       stopWords.add(line);
-		    }
-		    br.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		loadStopWords();
+	}
+	
+	private void loadStopWords() {
+		if (stopWords.isEmpty()) {
+			try {
+				// Chargement des stop words EN
+				BufferedReader br = new BufferedReader(new FileReader("common_words"));
+			    String line;
+			    while ((line = br.readLine()) != null) {
+			       stopWords.add(line);
+			    }
+			    br.close();
+			    // Chargement des stop words FR
+				br = new BufferedReader(new FileReader("common_words_fr"));
+			    while ((line = br.readLine()) != null) {
+			       stopWords.add(line);
+			    }
+			    br.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	@Override
 	public void index(Metadata metadata, String content) {
+		ArrayList<String> tokens = tokenize(content);
+		
+		// Adding index and inverted index
+		for (String token : tokens) {
+			index.add(metadata.getDocID(), token);
+		}
+	}
+	
+	@Override
+	public void finalizeIndexation() {
+		index.finalize();
+	}
+
+	@Override
+	public Index getIndex() {
+		return index;
+	}
+	
+	public ArrayList<String> tokenize(String content) {
+		loadStopWords();
 		// Tokenization
 		String[] initialTokens = content.split("\\s+|\\.|,|:|;|-|\\+|/|\\\\|\\W+['\"`´]|['\"`´]\\W+");
 		// Pas le plus efficace du monde, mais concis et compréhensible.
@@ -65,19 +90,6 @@ public class Labo1Indexer implements Indexer {
 			}
 		}
 		
-		// Adding index and inverted index
-		for (String token : tokens) {
-			index.add(metadata.getDocID(), token);
-		}
-	}
-
-	@Override
-	public void finalizeIndexation() {
-		index.finalize();
-	}
-
-	@Override
-	public Index getIndex() {
-		return index;
+		return tokens;
 	}
 }

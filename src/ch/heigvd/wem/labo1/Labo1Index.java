@@ -49,14 +49,17 @@ public class Labo1Index extends Index {
 		for (String word : this.wordToDoc.keySet()) {
 			if (!this.weightByWord.containsKey(word)) {
 				this.weightByWord.put(word, new HashMap<Long, HashMap<Retriever.WeightingType, Float>>());
-			}
-			HashMap<Long, HashMap<Retriever.WeightingType, Float>> documents = this.weightByWord.get(word);
-			
-			float df = 0;
+			}			
+			int df = this.wordToDoc.get(word).keySet().size();
+			float idf = 1.0f / (float)df;
+			// TODO : For etc
 			
 			// TODO : Compute tf, idf and normalized frequency. This code was an attempt, don't hesitate to delete
 			// everything.
 			
+			/*
+ 			HashMap<Long, HashMap<Retriever.WeightingType, Float>> documents = this.weightByWord.get(word);
+
 			for (Long docId : documents.keySet()) {
 				if (!documents.containsKey(docId)) {
 					documents.put(docId, new HashMap<Retriever.WeightingType, Float>());
@@ -70,7 +73,7 @@ public class Labo1Index extends Index {
 				float tfidf = 0; // TODO
 				weights.put(Retriever.WeightingType.NORMALIZED_FREQUENCY, tf);
 				weights.put(Retriever.WeightingType.TF_IDF, tfidf);
-			}
+			}*/
 			
 		}
 	}
