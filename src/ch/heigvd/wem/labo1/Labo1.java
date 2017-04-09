@@ -1,16 +1,22 @@
 package ch.heigvd.wem.labo1;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import ch.heigvd.wem.WebPageIndexerQueue;
 import ch.heigvd.wem.WebPageCrawler;
 import ch.heigvd.wem.interfaces.Index;
 import ch.heigvd.wem.interfaces.Indexer;
+import ch.heigvd.wem.interfaces.Retriever;
+import ch.heigvd.wem.interfaces.Retriever.WeightingType;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
@@ -34,7 +40,7 @@ public class Labo1 {
 
 		Index index = null;
 		
-		switch(mode) {
+		/*switch(mode) {
 		case CRAWL:
 			//we crawl and save the index to disk
 			index = crawl();
@@ -45,10 +51,52 @@ public class Labo1 {
 			//we load the index from disk
 			index = loadIndex(indexSaveFileName);
 			break;
-		}
-
-		//TODO recherche
+		}*/
 		
+		//-- Search -----------
+		String userInput = "";
+		Retriever retriever = null;
+		
+		
+		//IHM by console with the user
+		BufferedReader brUser = new BufferedReader(new InputStreamReader(System.in));
+		do{
+			System.out.println("Choose your ponderation [1-2]: ");
+			System.out.println("1. Normalized Frequency");
+			System.out.println("2. TF_IDF");
+			userInput = readUserInput(brUser);
+			switch(userInput){
+				case "1" :
+					retriever = new Labo1Retriever(index, WeightingType.NORMALIZED_FREQUENCY);
+					break;
+					
+				case "2" :
+					retriever = new Labo1Retriever(index, WeightingType.TF_IDF);
+					break;
+				
+				default :
+					System.out.println("Error, this argument is invalid !");
+			}
+		} while(!userInput.equals("1") && !userInput.equals("2"));
+		
+
+		do{
+			System.out.print("Enter search terms: ");
+			userInput = readUserInput(brUser);
+		} while(userInput.isEmpty());
+		
+		//Execution of the query
+		Map<Long, Double> results = retriever.executeQuery(userInput);
+		
+		//print of the results
+		for(Map.Entry<Long, Double> res : results.entrySet()){
+			System.out.println("Result :");
+			String result = new StringBuilder().append("Doc id: ")
+					.append(String.valueOf(res.getKey()))
+					.append(" cosinus similarity: ")
+					.append(String.valueOf(res.getValue())).toString();
+			System.out.println(result);
+		}
 	}
 	
 	private static Index crawl() {
@@ -120,6 +168,16 @@ public class Labo1 {
 		}
 		
 		return null;
+	}
+	
+	private static String readUserInput(BufferedReader brUser){
+		String inputUser = "";
+		try {
+			inputUser = brUser.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return inputUser;
 	}
 	
 }
