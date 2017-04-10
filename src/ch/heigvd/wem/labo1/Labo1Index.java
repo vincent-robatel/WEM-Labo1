@@ -52,30 +52,22 @@ public class Labo1Index extends Index {
 			}			
 			int df = this.wordToDoc.get(word).keySet().size();
 			float idf = 1.0f / (float)df;
-			// TODO : For etc
-			
-			// TODO : Compute tf, idf and normalized frequency. This code was an attempt, don't hesitate to delete
-			// everything.
-			
-			/*
- 			HashMap<Long, HashMap<Retriever.WeightingType, Float>> documents = this.weightByWord.get(word);
-
-			for (Long docId : documents.keySet()) {
-				if (!documents.containsKey(docId)) {
-					documents.put(docId, new HashMap<Retriever.WeightingType, Float>());
-				}
-				HashMap<Retriever.WeightingType, Float> weights = documents.get(docId);
-				HashMap<String, Integer> words = this.docToWord.get(docId);
-				float tf = words.get(word);
-				if (tf > 0) {
-					df += 1;
-				}
-				float tfidf = 0; // TODO
-				weights.put(Retriever.WeightingType.NORMALIZED_FREQUENCY, tf);
-				weights.put(Retriever.WeightingType.TF_IDF, tfidf);
-			}*/
-			
+			for (Long docId : this.wordToDoc.get(word).keySet()) {
+				int tf = this.wordToDoc.get(word).get(docId);
+				this.weightByWord.get(word).get(docId).put(Retriever.WeightingType.TF_IDF,               (float)tf * idf);
+				this.weightByWord.get(word).get(docId).put(Retriever.WeightingType.NORMALIZED_FREQUENCY, (float)tf);
+				this.weightByDoc.get(docId).get(word) .put(Retriever.WeightingType.TF_IDF,               (float)tf * idf);
+				this.weightByDoc.get(docId).get(word) .put(Retriever.WeightingType.NORMALIZED_FREQUENCY, (float)tf);
+			}			
 		}
+	}
+	
+	public HashMap<String, HashMap<Retriever.WeightingType, Float>> getDocWeights(Long docId) {
+		return this.weightByDoc.get(docId);
+	}
+	
+	public HashMap<Long, HashMap<Retriever.WeightingType, Float>> getWordWeights(String word) {
+		return this.weightByWord.get(word);
 	}
 	
 	private float normFreq(int freq, int maxFreq) {
