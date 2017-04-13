@@ -20,7 +20,7 @@ public class Labo1Indexer implements Indexer {
 		loadStopWords();
 	}
 	
-	private void loadStopWords() {
+	private static void loadStopWords() {
 		if (stopWords.isEmpty()) {
 			try {
 				// Chargement des stop words EN
@@ -57,6 +57,7 @@ public class Labo1Indexer implements Indexer {
 	@Override
 	public void finalizeIndexation() {
 		index.finalize();
+		System.out.println("Indexation done");
 	}
 
 	@Override
@@ -64,7 +65,7 @@ public class Labo1Indexer implements Indexer {
 		return index;
 	}
 	
-	public ArrayList<String> tokenize(String content) {
+	public static ArrayList<String> tokenize(String content) {
 		loadStopWords();
 		// Tokenization
 		String[] initialTokens = content.split("\\s+|\\.|,|:|;|-|\\+|/|\\\\|\\W+['\"`´]|['\"`´]\\W+");
