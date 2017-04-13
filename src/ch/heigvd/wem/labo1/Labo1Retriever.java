@@ -37,18 +37,23 @@ public class Labo1Retriever extends Retriever {
 
 	@Override
 	public Map<Long, Double> executeQuery(String query) {
-		//tokenize the query
+		//tokenize and optimize the query
 		List<String> words = Labo1Indexer.tokenize(query);
 		List<String> terms = new ArrayList<String>();
 		for(String word : words){
 			if(((Labo1Index) index).isWordExist(word))
 				terms.add(word);
 		}
+		
+		//Map for all docs where a word of the query appear
 		Map<Long, Double> termPonderationByDocs = null;
-		//Map contain all documents vectors
+		//Map for all documents vectors
 		Map<Long, Map<String,Double>> vectorsD = new HashMap<Long, Map<String,Double>>();
+		//Map for the query vector
 		Map<String, Double> vectorQ = new HashMap<String, Double>();
+		//Map for the final result (id doc, cos score)
 		Map<Long, Double> resultCosScore = new HashMap<Long, Double>();
+		
 		for(String term : terms){
 			//create the vector q
 			vectorQ.put(term, new Double(1));
@@ -61,6 +66,7 @@ public class Labo1Retriever extends Retriever {
 				vectorsD.get(entry.getKey()).put(term, entry.getValue());
 			}
 		}
+		
 		//add missing term with a 0 ponderation and compute cosine score
 		for(Entry<Long, Map<String,Double>> entry : vectorsD.entrySet()){
 			for(String term : terms){
@@ -98,6 +104,7 @@ public class Labo1Retriever extends Retriever {
 		return Math.sqrt(sum);
 	}
 	
+	//Sort the final map
 	private Map<Long, Double> sortResults(Map<Long, Double> results){
 		List<Map.Entry<Long, Double>> list = new LinkedList<Map.Entry<Long, Double>>(results.entrySet());
 		Collections.sort(list, new Comparator<Map.Entry<Long, Double>>() {
