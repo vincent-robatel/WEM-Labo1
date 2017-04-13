@@ -93,7 +93,10 @@ public class Labo1 {
 			String result = new StringBuilder().append("Doc id: ")
 					.append(String.valueOf(res.getKey()))
 					.append(" cosinus similarity: ")
-					.append(String.valueOf(res.getValue())).toString();
+					.append(String.valueOf(res.getValue()))
+					.append(" url: ")
+					.append(((Labo1Index)index).getUrl(res.getKey()))
+					.toString();
 			System.out.println(result);
 		}
 	}
