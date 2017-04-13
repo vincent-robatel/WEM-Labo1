@@ -24,10 +24,10 @@ public class Labo1Retriever extends Retriever {
 
 	@Override
 	public Map<Long, Double> searchTerm(String term) {
-		HashMap<Long, HashMap<Retriever.WeightingType, Float>> wordDocs = ((Labo1Index) index).getWordWeights(term);
-		Map<Long, Double> searchedDoc = null;
-		for (Entry<Long, HashMap<WeightingType, Float>> entry : wordDocs.entrySet()) {
-			searchedDoc.put(entry.getKey(), entry.getValue().get(this.weightingType).doubleValue());
+		HashMap<Long, Float> wordDocs = ((Labo1Index) index).getWordWeights(this.weightingType, term);
+		Map<Long, Double> searchedDoc = new TreeMap<Long, Double>();
+		for (Entry<Long, Float> entry : wordDocs.entrySet()) {
+			searchedDoc.put(entry.getKey(), entry.getValue().doubleValue());
 		}
 		return searchedDoc;
 	}
