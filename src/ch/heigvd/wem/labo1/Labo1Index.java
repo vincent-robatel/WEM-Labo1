@@ -11,15 +11,17 @@ public class Labo1Index extends Index {
 	private HashMap<Long, HashMap<String, Integer>> documentIndex;
 	private HashMap<String, HashMap<WeightingType, HashMap<Long, Float>>> weightByWord;
 	private HashMap<Long, HashMap<WeightingType, HashMap<String, Float>>> weightByDoc;
+	private HashMap<Long, String> urls;
 	
 	public Labo1Index() {
 		this.inversedIndex = new HashMap<String, HashMap<Long, Integer>>();
 		this.documentIndex = new HashMap<Long, HashMap<String, Integer>>();
 		this.weightByWord = new HashMap<String, HashMap<WeightingType, HashMap<Long, Float>>>();
 		this.weightByDoc  = new HashMap<Long, HashMap<WeightingType, HashMap<String, Float>>>();
+		this.urls = new HashMap<Long, String>();
 	}
 
-	public synchronized void add(Long docId, String word) {
+	public synchronized void add(Long docId, String word, String url) {
 		
 		if (!this.inversedIndex.containsKey(word)) {
 			this.inversedIndex.put(word, new HashMap<Long, Integer>());
@@ -42,6 +44,10 @@ public class Labo1Index extends Index {
 		}
 		Integer currentDoc = docMap.get(word);
 		docMap.put(word, currentDoc + 1);
+		
+		if (!this.urls.containsKey(docId)) {
+			this.urls.put(docId, url);
+		}
 	}
 	
 	public void finalize() {
@@ -128,5 +134,9 @@ public class Labo1Index extends Index {
 	
 	public Boolean isWordExist(String word){
 		return this.weightByWord.containsKey(word);
+	}
+	
+	public String getUrl(long docId) {
+		return this.urls.get(docId);
 	}
 }

@@ -50,7 +50,7 @@ public class Labo1Indexer implements Indexer {
 		
 		// Adding index and inverted index
 		for (String token : tokens) {
-			index.add(metadata.getDocID(), token);
+			index.add(metadata.getDocID(), token, metadata.getUrl().toString());
 		}
 	}
 	
