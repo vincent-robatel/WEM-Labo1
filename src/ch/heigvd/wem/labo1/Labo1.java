@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import ch.heigvd.wem.WebPageIndexerQueue;
 import ch.heigvd.wem.WebPageCrawler;
@@ -33,7 +32,7 @@ public class Labo1 {
 	// CONFIGURATION
 	public static final String  START_URL 			= "http://iict.heig-vd.ch";
 	public static final boolean DEBUG				= true;
-	private static final Mode	mode				= Mode.CRAWL;
+	private static final Mode	mode				= Mode.RESTORE;
 	private static final String	indexSaveFileName	= "iict.bin";
 	
 	public static void main(String[] args) {

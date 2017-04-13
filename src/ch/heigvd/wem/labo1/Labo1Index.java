@@ -119,7 +119,8 @@ public class Labo1Index extends Index {
 	}
 	
 	public HashMap<Long, Float> getWordWeights(WeightingType weightingType, String word) {
-		return this.weightByWord.get(weightingType).get(word);
+		HashMap<Long, Float> map = this.weightByWord.get(weightingType).get(word);
+		return map;
 	}
 	
 	private float log2(float n) {

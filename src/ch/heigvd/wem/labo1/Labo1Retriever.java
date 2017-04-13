@@ -35,7 +35,7 @@ public class Labo1Retriever extends Retriever {
 	@Override
 	public Map<Long, Double> executeQuery(String query) {
 		//tokenize the query
-		ArrayList<String> terms = new Labo1Indexer().tokenize(query);
+		ArrayList<String> terms = Labo1Indexer.tokenize(query);
 		Map<Long, Double> termPonderationByDocs = null;
 		//Map contain all documents vectors
 		Map<Long, Map<String,Double>> vectorsD = new HashMap<Long, Map<String,Double>>();
