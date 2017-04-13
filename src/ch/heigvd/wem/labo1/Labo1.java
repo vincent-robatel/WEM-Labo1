@@ -40,7 +40,7 @@ public class Labo1 {
 
 		Index index = null;
 		
-		/*switch(mode) {
+		switch(mode) {
 		case CRAWL:
 			//we crawl and save the index to disk
 			index = crawl();
@@ -51,7 +51,7 @@ public class Labo1 {
 			//we load the index from disk
 			index = loadIndex(indexSaveFileName);
 			break;
-		}*/
+		}
 		
 		//-- Search -----------
 		String userInput = "";
