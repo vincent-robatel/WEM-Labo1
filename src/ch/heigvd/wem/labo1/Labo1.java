@@ -88,16 +88,21 @@ public class Labo1 {
 		Map<Long, Double> results = retriever.executeQuery(userInput);
 		
 		//print of the results
-		for(Map.Entry<Long, Double> res : results.entrySet()){
-			System.out.println("Result :");
-			String result = new StringBuilder().append("Doc id: ")
-					.append(String.valueOf(res.getKey()))
-					.append(" cosinus similarity: ")
-					.append(String.valueOf(res.getValue()))
-					.append(" url: ")
-					.append(((Labo1Index)index).getUrl(res.getKey()))
-					.toString();
-			System.out.println(result);
+		if(results.isEmpty()){
+			System.out.println("No result");
+		}
+		else{
+			for(Map.Entry<Long, Double> res : results.entrySet()){
+				System.out.println("Result :");
+				String result = new StringBuilder().append("Doc id: ")
+						.append(String.valueOf(res.getKey()))
+						.append(" cosinus similarity: ")
+						.append(String.valueOf(res.getValue()))
+						.append(" url: ")
+						.append(((Labo1Index)index).getUrl(res.getKey()))
+						.toString();
+				System.out.println(result);
+			}
 		}
 	}
 	

@@ -2,11 +2,13 @@ package ch.heigvd.wem.labo1;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import ch.heigvd.wem.interfaces.Index;
 import ch.heigvd.wem.interfaces.Retriever;
@@ -26,7 +28,7 @@ public class Labo1Retriever extends Retriever {
 	@Override
 	public Map<Long, Double> searchTerm(String term) {
 		HashMap<Long, Float> wordDocs = ((Labo1Index) index).getWordWeights(this.weightingType, term);
-		Map<Long, Double> searchedDoc = new TreeMap<Long, Double>();
+		Map<Long, Double> searchedDoc = new HashMap<Long, Double>();
 		for (Entry<Long, Float> entry : wordDocs.entrySet()) {
 			searchedDoc.put(entry.getKey(), entry.getValue().doubleValue());
 		}
@@ -46,7 +48,7 @@ public class Labo1Retriever extends Retriever {
 		//Map contain all documents vectors
 		Map<Long, Map<String,Double>> vectorsD = new HashMap<Long, Map<String,Double>>();
 		Map<String, Double> vectorQ = new HashMap<String, Double>();
-		Map<Long, Double> resultCosScore = new TreeMap<Long, Double>(Collections.reverseOrder());
+		Map<Long, Double> resultCosScore = new HashMap<Long, Double>();
 		for(String term : terms){
 			//create the vector q
 			vectorQ.put(term, new Double(1));
@@ -68,12 +70,16 @@ public class Labo1Retriever extends Retriever {
 			resultCosScore.put(entry.getKey(), cosineScore(entry.getValue(), vectorQ));
 		}
 		
-		return resultCosScore;
+		return sortResults(resultCosScore);
 	}
 
+	
 	//Calcul the COSINE SCORE
 	private Double cosineScore(Map<String,Double> d, Map<String,Double> q){
-		return pairDot(d, q) / (vectorNorm(d) * vectorNorm(q));
+		Double result = pairDot(d, q) / (vectorNorm(d) * vectorNorm(q));
+		if(Double.isNaN(result))
+			result = new Double(0);
+			return result;
 	}
 	
 	private Double pairDot(Map<String,Double> d, Map<String,Double> q){
@@ -92,6 +98,20 @@ public class Labo1Retriever extends Retriever {
 		return Math.sqrt(sum);
 	}
 	
+	private Map<Long, Double> sortResults(Map<Long, Double> results){
+		List<Map.Entry<Long, Double>> list = new LinkedList<Map.Entry<Long, Double>>(results.entrySet());
+		Collections.sort(list, new Comparator<Map.Entry<Long, Double>>() {
+            public int compare(Map.Entry<Long, Double> o1,
+                               Map.Entry<Long, Double> o2) {
+                return (o2.getValue()).compareTo(o1.getValue());
+            }
+        });
+		Map<Long, Double> sortedMap = new LinkedHashMap<Long, Double>();
+        for (Map.Entry<Long, Double> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+		return sortedMap;
+	}
 }
 
 
