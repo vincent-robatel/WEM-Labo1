@@ -1,10 +1,11 @@
 package ch.heigvd.wem.labo1;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
+import java.util.TreeMap;
 
 import ch.heigvd.wem.interfaces.Index;
 import ch.heigvd.wem.interfaces.Retriever;
@@ -39,7 +40,7 @@ public class Labo1Retriever extends Retriever {
 		//Map contain all documents vectors
 		Map<Long, Map<String,Double>> vectorsD = new HashMap<Long, Map<String,Double>>();
 		Map<String, Double> vectorQ = new HashMap<String, Double>();
-		Map<Long, Double> resultCosScore = new HashMap<Long, Double>();
+		Map<Long, Double> resultCosScore = new TreeMap<Long, Double>(Collections.reverseOrder());
 		for(String term : terms){
 			//create the vector q
 			vectorQ.put(term, new Double(1));
@@ -60,6 +61,7 @@ public class Labo1Retriever extends Retriever {
 			}
 			resultCosScore.put(entry.getKey(), cosineScore(entry.getValue(), vectorQ));
 		}
+		
 		return resultCosScore;
 	}
 
