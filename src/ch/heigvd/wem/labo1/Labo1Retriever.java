@@ -3,6 +3,7 @@ package ch.heigvd.wem.labo1;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -35,7 +36,12 @@ public class Labo1Retriever extends Retriever {
 	@Override
 	public Map<Long, Double> executeQuery(String query) {
 		//tokenize the query
-		ArrayList<String> terms = Labo1Indexer.tokenize(query);
+		List<String> words = Labo1Indexer.tokenize(query);
+		List<String> terms = new ArrayList<String>();
+		for(String word : words){
+			if(((Labo1Index) index).isWordExist(word))
+				terms.add(word);
+		}
 		Map<Long, Double> termPonderationByDocs = null;
 		//Map contain all documents vectors
 		Map<Long, Map<String,Double>> vectorsD = new HashMap<Long, Map<String,Double>>();
