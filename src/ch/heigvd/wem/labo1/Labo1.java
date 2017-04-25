@@ -32,7 +32,7 @@ public class Labo1 {
 	// CONFIGURATION
 	public static final String  START_URL 			= "http://iict.heig-vd.ch";
 	public static final boolean DEBUG				= true;
-	private static final Mode	mode				= Mode.RESTORE;
+	private static final Mode	mode				= Mode.CRAWL;
 	private static final String	indexSaveFileName	= "iict.bin";
 	
 	public static void main(String[] args) {
@@ -150,6 +150,12 @@ public class Labo1 {
 	
 	private static void saveIndex(String filename, Index index) {
 		try {
+			try {
+				File dir = new File("save");
+				dir.mkdir();
+			} catch (Exception e) {
+				// It's ok
+			}
 			File outputFile = new File("save", filename);
 			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(outputFile));
 			out.writeObject(index);
@@ -162,6 +168,12 @@ public class Labo1 {
 	
 	private static Index loadIndex(String filename) {
 		try {
+			try {
+				File dir = new File("save");
+				dir.mkdir();
+			} catch (Exception e) {
+				// It's ok
+			}
 			File inputFile = new File("save", filename);
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(inputFile));
 			Object o = in.readObject();
