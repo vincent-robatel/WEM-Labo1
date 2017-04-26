@@ -14,12 +14,31 @@ public class LinkAnalysis {
 	 * @return Hub vector.
 	 */
 	public static Vector<Double> calculateHc (AdjacencyMatrix m, Vector<Double> ac) {
+		int mSize = m.size();
+		Vector<Double> result = new Vector<Double>(mSize);
+		double sqSum = 0.d;
 
-		Vector<Double> result = new Vector<Double>(m.size());
+		// Initial algorithm
+		for (int i = 0; i < mSize; i++) {
+			double current = 0;
+			for (int j = 0; j < mSize; j++) {
+				if (m.get(i, j) == 1) {
+					current += ac.get(j);
+				}
+			}
+			result.add(current);
+			sqSum += current * current;
+		}
+		
+		// Normalization
+		Vector<Double> normalized = new Vector<Double>(mSize);
+		
+		sqSum = Math.sqrt(sqSum);
+		for (int i = 0; i < mSize; i++) {
+			normalized.add(result.get(i) / sqSum);
+		}
 
-		/* A IMPLEMENTER */
-
-		return result; 
+		return normalized;
 	}
 
 	/**
@@ -29,12 +48,31 @@ public class LinkAnalysis {
 	 * @return Authority vector.
 	 */
 	public static Vector<Double> calculateAc (AdjacencyMatrix m, Vector<Double> hc) {
+		int mSize = m.size();
+		Vector<Double> result = new Vector<Double>(mSize);
+		double sqSum = 0.d;
 
-		Vector<Double> result = new Vector<Double>(m.size());
+		// Initial algorithm
+		for (int i = 0; i < mSize; i++) {
+			double current = 0;
+			for (int j = 0; j < mSize; j++) {
+				if (m.get(j, i) == 1) {
+					current += hc.get(j);
+				}
+			}
+			result.add(current);
+			sqSum += current * current;
+		}
+		
+		// Normalization
+		Vector<Double> normalized = new Vector<Double>(mSize);
+		
+		sqSum = Math.sqrt(sqSum);
+		for (int i = 0; i < mSize; i++) {
+			normalized.add(result.get(i) / sqSum);
+		}
 
-		/* A IMPLEMENTER */
-
-		return result; 
+		return normalized;
 	}
 
 	/**
