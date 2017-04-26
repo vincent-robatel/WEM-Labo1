@@ -34,9 +34,10 @@ public class Labo2 {
 			Vector<Double> newAc = LinkAnalysis.calculateAc(matrix, hc);
 			hc = newHc;
 			ac = newAc;
-			pr = LinkAnalysis.calculatePRc(matrix, pr);
+			pr = LinkAnalysis.calculatePRc(matrix.getTransitionMatrix(), pr);
 			System.out.println(hc);
 			System.out.println(ac);
+			System.out.println(pr);
 		}
 	}
 }

@@ -82,12 +82,31 @@ public class LinkAnalysis {
 	 * @return Pagerank vector.
 	 */
 	public static Vector<Double> calculatePRc (AdjacencyMatrix m, Vector<Double> pr) {
-
+		double d = 0.85d;
+		int mSize = m.size();
 		Vector<Double> result = new Vector<Double>(m.size());
+		double sum = 0.d;
 
-		/* A IMPLEMENTER */
+		// Initial algorithm
+		for (int i = 0; i < mSize; i++) {
+			double current = 0;
+			for (int j = 0; j < mSize; j++) {
+				if (m.get(i, j) == 1) {
+					current += (d * pr.get(j) + (1 - d));
+				}
+			}
+			result.add(current);
+			sum += current;
+		}
+		
+		// Normalization
+		Vector<Double> normalized = new Vector<Double>(mSize);
+		
+		for (int i = 0; i < mSize; i++) {
+			normalized.add(result.get(i) / sum);
+		}
 
-		return result; 
+		return normalized; 
 	}
 	
 }
