@@ -12,24 +12,31 @@ public class Labo2 {
 	public static void main(String[] args) {
 		GraphFileReader fileReader = new GraphFileReader("graph_reference.txt");
 		AdjacencyMatrix matrix = fileReader.getAdjacencyMatrix();
-		HashMap<String, Integer> mapping = fileReader.getNodeMapping();
+		HashMap<String, Integer> map = fileReader.getNodeMapping();
+		
+		int mSize = matrix.size();
 		
 		Vector<Double> hc = new Vector<Double>();
 		Vector<Double> ac = new Vector<Double>();
 		Vector<Double> pr = new Vector<Double>();
 		
-		Vector<Double> newHc = new Vector<Double>();
-		Vector<Double> newAc = new Vector<Double>();
-		
-		int mSize = matrix.size();
+		// Initialization
 		for (int i = 0; i < mSize; i++) {
-			for (int j = 0; j < mSize; j++) {
-				newHc = LinkAnalysis.calculateHc(matrix, ac);
-				newAc = LinkAnalysis.calculateHc(matrix, hc);
-				hc = newHc;
-				ac = newAc;
-				pr = LinkAnalysis.calculatePRc(matrix, pr);
-			}
+			hc.add(1.d);
+			ac.add(1.d);
+			pr.add(1.d/(double)mSize);
+		}
+		
+		// Computation
+		for (int i = 0; i < 20; i++) {
+			System.out.println("Iteration " + i);
+			Vector<Double> newHc = LinkAnalysis.calculateHc(matrix, ac);
+			Vector<Double> newAc = LinkAnalysis.calculateAc(matrix, hc);
+			hc = newHc;
+			ac = newAc;
+			pr = LinkAnalysis.calculatePRc(matrix, pr);
+			System.out.println(hc);
+			System.out.println(ac);
 		}
 	}
 }
