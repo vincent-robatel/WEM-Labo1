@@ -1,6 +1,8 @@
 package ch.heigvd.wem.labo2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
 import ch.heigvd.wem.linkanalysis.AdjacencyMatrix;
@@ -11,10 +13,21 @@ public class Labo2 {
 
 	public static void main(String[] args) {
 		// Initialize necessary structures
-		GraphFileReader fileReader = new GraphFileReader("graph_reference.txt");
+		/*GraphFileReader fileReader = new GraphFileReader("graph_reference.txt");
 		AdjacencyMatrix matrix = fileReader.getAdjacencyMatrix();
 		HashMap<String, Integer> initialMap = fileReader.getNodeMapping();
 		HashMap<Integer, String> reversedMap = new HashMap<>(); // The map we get from GraphFileReader is more useful once reversed
+		*/
+		List<String> sss = new ArrayList<String>();
+		sss.add("http://iict.heig-vd.ch/recherche");
+		sss.add("http://iict.heig-vd.ch/a-propos");
+		sss.add("http://iict.heig-vd.ch/team");
+		sss.add("http://iict.heig-vd.ch/team/show/85/brochet-xavier/");
+		GraphUrlReader fileReader = new GraphUrlReader("http://iict.heig-vd.ch",sss);
+		AdjacencyMatrix matrix = fileReader.getAdjacencyMatrix();
+		HashMap<String, Integer> initialMap = fileReader.getNodeMapping();
+		HashMap<Integer, String> reversedMap = new HashMap<>(); // The map we get from GraphFileReader is more useful once reversed
+		
 		for(HashMap.Entry<String, Integer> entry : initialMap.entrySet()){
 		    reversedMap.put(entry.getValue(), entry.getKey());
 		}
