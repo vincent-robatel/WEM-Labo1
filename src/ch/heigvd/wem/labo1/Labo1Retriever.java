@@ -45,7 +45,7 @@ public class Labo1Retriever extends Retriever {
 				terms.add(word);
 		}
 		
-		//Map for all docs where a word of the query appear
+		//Map for all docs where a token of the query appear
 		Map<Long, Double> termPonderationByDocs = null;
 		//Map for all documents vectors
 		Map<Long, Map<String,Double>> vectorsD = new HashMap<Long, Map<String,Double>>();
