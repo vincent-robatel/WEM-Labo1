@@ -91,8 +91,9 @@ public class LinkAnalysis {
 		for (int i = 0; i < mSize; i++) {
 			double current = 0;
 			for (int j = 0; j < mSize; j++) {
-				current += (m.get(j, i) * d * pr.get(j) + (1 - d));
+				current += (m.get(j, i) * pr.get(j));
 			}
+			current = current * d + (1.d - d);
 			result.add(current);
 			sum += current;
 		}
