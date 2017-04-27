@@ -23,6 +23,8 @@ public class Labo2 {
 		sss.add("http://iict.heig-vd.ch/a-propos");
 		sss.add("http://iict.heig-vd.ch/team");
 		sss.add("http://iict.heig-vd.ch/team/show/85/brochet-xavier/");
+		//sss.add("http://iict.heig-vd.ch/team/show/83/bignens-julien/");
+		//sss.add("http://iict.heig-vd.ch/team/show/84/bischof-jonathan/");
 		GraphUrlReader fileReader = new GraphUrlReader("http://iict.heig-vd.ch",sss);
 		AdjacencyMatrix matrix = fileReader.getAdjacencyMatrix();
 		HashMap<String, Integer> initialMap = fileReader.getNodeMapping();

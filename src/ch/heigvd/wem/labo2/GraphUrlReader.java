@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -32,23 +33,26 @@ public class GraphUrlReader {
 		for(String url : urls){
 			try {
 				nodes.add(url);
-				
+				System.out.println(url);
 				//get the html code of the url
 				doc = Jsoup.connect(url).get();
 				Elements links = doc.select("a[href]");
 			
 				for (Element link : links) {
 					String href = link.attr("href");
-	            	if(linkIntern(urls, url, href)){
+	            	if(linkIntern(urls, url, href, startUrl)){
 	            		String linkFormated = formatLink(startUrl, href);
 	            		if(!edges.containsKey(url)){
 	            			list = new LinkedList<String>();
 	            			edges.put(url, list);
 	            		}
-	            		if(!edges.get(url).contains(linkFormated))
+	            		if(!edges.get(url).contains(linkFormated)){
 	            			edges.get(url).add(linkFormated);
+	            			System.out.println("  -"+linkFormated);
+	            		}
 	            	}
 	            }
+				System.out.println("---------------------------------------------");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -99,10 +103,10 @@ public class GraphUrlReader {
 	}
 
 	//Check if the href link is an inside link 
-	private boolean linkIntern(List<String> urls, String currentUrl, String link){
+	private boolean linkIntern(List<String> urls, String currentUrl, String link, String startUrl){
 		boolean check = false;
 		for(String url : urls)
-			if(url.contains(link) && !currentUrl.contains(link) && !link.equals("/")) check = true;
+			if(url.contains(link) && !currentUrl.equals(formatLink(startUrl,link)) && !link.equals("/")) check = true;
 		return check;
 	}
 }
