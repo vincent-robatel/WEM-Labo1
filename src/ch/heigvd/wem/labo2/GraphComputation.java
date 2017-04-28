@@ -1,19 +1,20 @@
 package ch.heigvd.wem.labo2;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import ch.heigvd.wem.linkanalysis.AdjacencyMatrix;
-import ch.heigvd.wem.linkanalysis.GraphFileReader;
-import ch.heigvd.wem.linkanalysis.*;
+import ch.heigvd.wem.linkanalysis.LinkAnalysis;
 
-public class Labo2 {
+public class GraphComputation {
 
-	public static void main(String[] args) {
-		// Initialize necessary structures
-		GraphFileReader fileReader = new GraphFileReader("graph_reference.txt");
-		AdjacencyMatrix matrix = fileReader.getAdjacencyMatrix();
-		HashMap<String, Integer> initialMap = fileReader.getNodeMapping();
+	private Map<String, Double> prScore;
+	
+	public GraphComputation(GraphUrlReader graphUrlReader){
+		prScore = new HashMap<String, Double>();
+		AdjacencyMatrix matrix = graphUrlReader.getAdjacencyMatrix();
+		HashMap<String, Integer> initialMap = graphUrlReader.getNodeMapping();
 		HashMap<Integer, String> reversedMap = new HashMap<>(); // The map we get from GraphFileReader is more useful once reversed
 		
 		for(HashMap.Entry<String, Integer> entry : initialMap.entrySet()){
@@ -42,13 +43,12 @@ public class Labo2 {
 			pr = LinkAnalysis.calculatePRc(matrix.getTransitionMatrix(), pr);
 		}
 		
-		// Print results
 		for (int i = 0; i < mSize; i++) {
-			System.out.println("*** Node " + i + " : " + reversedMap.get(i) + " ***");
-			System.out.println("      Hub : " + hc.get(i));
-			System.out.println("Authority : " + ac.get(i));
-			System.out.println(" PageRank : " + pr.get(i));
-			System.out.println();
+			prScore.put(reversedMap.get(i), pr.get(i));
 		}
+	}
+	
+	public Double getPageRank(String url){
+		return prScore.get(url);
 	}
 }

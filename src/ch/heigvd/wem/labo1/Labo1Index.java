@@ -1,6 +1,8 @@
 package ch.heigvd.wem.labo1;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import ch.heigvd.wem.interfaces.Index;
 import ch.heigvd.wem.interfaces.Retriever.WeightingType;
@@ -138,5 +140,13 @@ public class Labo1Index extends Index {
 	
 	public String getUrl(long docId) {
 		return this.urls.get(docId);
+	}
+	
+	public List<String> getAllUrl(){
+		List<String> allUrl = new ArrayList<String>();
+		for(String url :urls.values()){
+			allUrl.add(url);
+		}
+		return allUrl;
 	}
 }

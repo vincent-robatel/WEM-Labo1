@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -33,7 +32,7 @@ public class GraphUrlReader {
 		for(String url : urls){
 			try {
 				nodes.add(url);
-				System.out.println(url);
+				//System.out.println(url);
 				//get the html code of the url
 				doc = Jsoup.connect(url).get();
 				Elements links = doc.select("a[href]");
@@ -48,11 +47,11 @@ public class GraphUrlReader {
 	            		}
 	            		if(!edges.get(url).contains(linkFormated)){
 	            			edges.get(url).add(linkFormated);
-	            			System.out.println("  -"+linkFormated);
+	            			//System.out.println("  -"+linkFormated);
 	            		}
 	            	}
 	            }
-				System.out.println("---------------------------------------------");
+				//System.out.println("---------------------------------------------");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

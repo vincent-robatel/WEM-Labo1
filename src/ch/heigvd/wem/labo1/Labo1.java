@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import ch.heigvd.wem.WebPageIndexerQueue;
@@ -32,7 +30,7 @@ public class Labo1 {
 	}
 	
 	// CONFIGURATION
-	public static final String  START_URL 			= "http://iict.heig-vd.ch";
+	public static final String  START_URL 			= "http://www.rosas.center";
 	public static final boolean DEBUG				= true;
 	private static final Mode	mode				= Mode.CRAWL;
 	private static final String	indexSaveFileName	= "iict.bin";
@@ -89,25 +87,21 @@ public class Labo1 {
 		//Execution of the query
 		Map<Long, Double> results = retriever.executeQuery(userInput);
 		
-		//Lab2 creation of node/egdes
-		List<String> urls = new ArrayList<String>();
-		for(Long idDoc : results.keySet()){
-			urls.add(((Labo1Index)index).getUrl(idDoc));
-		}
 		
 		//print of the results
 		if(results.isEmpty()){
 			System.out.println("No result");
 		}
 		else{
-			for(Map.Entry<Long, Double> res : results.entrySet()){
-				System.out.println("Result :");
+			System.out.println("Result :");
+			for(Map.Entry<Long, Double> res : results.entrySet()){		
 				String result = new StringBuilder().append("Doc id: ")
 						.append(String.valueOf(res.getKey()))
 						.append(" cosinus similarity: ")
 						.append(String.valueOf(res.getValue()))
 						.append(" url: ")
 						.append(((Labo1Index)index).getUrl(res.getKey()))
+						.append("\n")
 						.toString();
 				System.out.println(result);
 			}

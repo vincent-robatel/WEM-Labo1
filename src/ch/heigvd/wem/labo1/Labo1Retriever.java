@@ -12,6 +12,8 @@ import java.util.Map.Entry;
 
 import ch.heigvd.wem.interfaces.Index;
 import ch.heigvd.wem.interfaces.Retriever;
+import ch.heigvd.wem.labo2.GraphComputation;
+import ch.heigvd.wem.labo2.GraphUrlReader;
 
 public class Labo1Retriever extends Retriever {
 
@@ -76,6 +78,15 @@ public class Labo1Retriever extends Retriever {
 			resultCosScore.put(entry.getKey(), cosineScore(entry.getValue(), vectorQ));
 		}
 		
+		
+		//LABO 2
+		if(weightingType.equals(WeightingType.TF_IDF)){
+			GraphComputation computation = new GraphComputation(new GraphUrlReader(Labo1.START_URL, ((Labo1Index)index).getAllUrl()));
+			for(Map.Entry<Long, Double> res : resultCosScore.entrySet()){
+				resultCosScore.replace(res.getKey(), res.getValue(), res.getValue() * computation.getPageRank(((Labo1Index)index).getUrl(res.getKey())));	
+			}
+		}
+		
 		return sortResults(resultCosScore);
 	}
 
@@ -119,6 +130,7 @@ public class Labo1Retriever extends Retriever {
         }
 		return sortedMap;
 	}
+	
 }
 
 
